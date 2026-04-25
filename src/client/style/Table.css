@@ -1,0 +1,28 @@
+.table__loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  min-height: 200px;
+}
+
+.table__error {
+  padding: 1rem;
+  background-color: #ffebee;
+  color: #c62828;
+  border-radius: 4px;
+  border-left: 4px solid #c62828;
+  font-size: 0.9rem;
+}
+
+.table__header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.table__header__search-field {
+  width: 40%;
+  max-width: 300px;
+}
