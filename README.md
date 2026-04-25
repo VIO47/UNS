@@ -55,7 +55,6 @@ Despite creating a simple MVP, I would consider that creating migrations is stil
 | Column          | Type     | Constraints / Default                | Description                |
 | --------------- | -------- | ------------------------------------ | -------------------------- |
 | id              | INTEGER  | PRIMARY KEY                          | Unique option identifier   |
-| project_id      | INTEGER  | NOT NULL, FOREIGN KEY → projects(id) | Associated project         |
 | title           | TEXT     | NOT NULL                             | Option name                |
 | description     | TEXT     | —                                    | Optional description       |
 | area            | REAL     | —                                    | Area metric                |
