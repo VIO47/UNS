@@ -42,12 +42,18 @@ http://localhost:3001/dummy-options
 Most of the decisions I made for the tech stack are purely for setting up a simple MVP. In a real scenario, I would only stick most probably to using Typescript as the main frontend language as it makes everything easier to visualize on top of adding extra safety if FE and BE are completely decoupled from working. Depending on how much data gets added and how complex the data handling per objects gets, I would even still stick to REST instead of using RPC, but might also just be personal preference of how explicit and simply structured it is. The UI library was just something that I have worked with before, not really much I can comment on, and Vite is just a very simple template creator especially when this was a single page app even without routing.
 
 # PROJECT PROPOSAL
-This compariosn app will act more like a stylized database, for 2 main contents: projects and design options per project. User will be able to select a project for which there are a list of design options presented in a table. Most of the focus is on data visualization, as this is most of the use case. A user journey would be that they load the page, select through a couple of options and press the compare button to see their specs in a table-view manner. To be able to add data, they can choose to manually type it or to use an external URL. The URL will try to match exactly as the database stores a design option. If there isn't a perfect match, you are shown a mapping table.
+This app resembles a structured database for design options. Users are presented with design options in a table, where the primary interaction is selecting and comparing entries side by side. The comparison view displays each option's specifications in a structured, readable format.
+
+Data can be added either manually through a form, or by providing an external URL. When importing from a URL, the app attempts to map the incoming fields directly to the database schema. If an exact match isn't found, the user is presented with a mapping interface to align the fields manually.
 
 # DATA ARCHITECTURE
 
 ## HIGH LEVEL LOGIC
-Despite creating a simple MVP, I would consider that creating migrations is still a simple trick which is standard now considering the usage of multiple server instances. I started with a simple migration where I initialized the design_options. There I also added the tags despite not tackling them because they would be relevant for better selection of data.
+Despite creating a simple MVP, I would consider that creating migrations is still a simple trick which is standard now considering the usage of multiple server instances. I started with a simple migration where I initialized the `design_options`. There I also added the tags despite not tackling them because they would be relevant for better selection of data.
+
+To make the data scalable for when there would be 5K+ options inside the database, I decided to go for a server side filtering, with caching of query results. This means that repeatedly searching, deleting the search input and filtering again wont be so computationally expensive. In this model, I only indexed by title, because this is the only way of filtering, but if other values are available to filter they should also be indexed on. I am aware that the search doesn't work optimal because it clears out the field, but I wanted to test loading information as a filter takes longer to process than a simple GET ALL.
+
+I opted for a soft delete just because of how often I saw people asking to have data recovered even years after having it deleted. A periodic job to delete stale data can be added in case this becomes hard to maintain when more complexity is added to the architecture.
 
 ## TABLES
 
@@ -94,9 +100,9 @@ From the perspective of the environment setup, there are also clear areas for im
 
 From an architectural standpoint, I would consider introducing data classes corresponding to each database table. This would make it easier to encapsulate logic related to processing and validating individual fields, especially if the application grows in complexity. Given the current scope, I chose not to implement this, as it would have added extra structure without providing immediate value.
 
-I would also improve error handling, particularly when adding new items. At the moment, there are limited safeguards to prevent invalid data from being inserted. For example, I introduced the concept of tags as potential filters, but did not fully implement them. If completed, the backend should validate inputs and return meaningful errors, such as notifying the user when a tag already exists.
+I would also improve error handling, particularly when adding new items. At the moment, there are limited safeguards to prevent invalid data from being inserted. For example, I introduced the concept of tags as potential filters, but did not fully implement them. If completed, the backend should validate inputs and return meaningful errors, such as notifying the user when a tag already exists. Apart from FE error handling, a for sure must is dat avalidation inside the BE. Right now, you could easily do injections through the inputs of the option design. Also, you can add values that don't make sens such as negative costs.
 
 Finally, the current filtering capabilities in the UI are quite minimal. Filtering is limited to a basic text search by title, which is insufficient for more complex use cases. Enhancing this with additional controls, such as dropdowns, range filters, or tag-based filtering, would make the interface more user-friendly. For better comparisson, I would also add a feature of highlighting differences and allowing to add more items in the comparison dialog (a plus button to have another dummy empty select).
 
-My biggest dissapointment would be how the app looks and even some user interactions, but also, because of trying to make a simple mock, I decided to add very simple interactions instead of making everything more appealing and even more dynamic, more intuitive and just combine better.
+My biggest disappointment is the UI, both visually and in terms of user experience. In the interest of building a functional prototype quickly, I prioritised simplicity over polish, which meant leaving out interactions and design details that would have made the app feel more intuitive and cohesive.
 
